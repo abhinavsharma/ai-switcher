@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "ChatGPT FAB",
+  "version": "1.0",
+  "description": "Adds a floating action button to ChatGPT",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["*://*/*"],
+  "content_scripts": [
+    {
+      "matches": ["*://chatgpt.com/*"],
+      "js": ["content.js"],
+      "css": ["style.css"]
+    }
+  ],
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  }
+}
