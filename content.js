@@ -15,7 +15,8 @@ const AI_APPS = [
     color: 'bg-blue-600',
     url: 'https://chatgpt.com/',
     newChatUrl: 'https://chatgpt.com/',
-    firstPromptSelector: '[data-testid="conversation-turn-1" .whitespace-pre-wrap'
+    firstPromptSelector: '[data-testid="conversation-turn-1"] .whitespace-pre-wrap',
+    inputSelector: '#prompt-textarea'
   },
   {
     name: 'Gemini',
@@ -24,7 +25,8 @@ const AI_APPS = [
     color: 'bg-blue-600',
     url: 'https://gemini.google.com/',
     newChatUrl: 'https://gemini.google.com/',
-    firstPromptSelector: '.user-query-bubble-with-background', // Placeholder for actual selector
+    firstPromptSelector: '.user-query-bubble-with-background',
+    inputSelector: 'rich-textarea.text-input-field_textarea'
   },
   {
     name: 'Claude',
@@ -33,7 +35,8 @@ const AI_APPS = [
     color: 'bg-blue-600',
     url: 'https://claude.ai/',
     newChatUrl: 'https://claude.ai/chats',
-    firstPromptSelector: '[data-testid="user-message"]', // Placeholder for actual selector
+    firstPromptSelector: '[data-testid="user-message"]',
+    inputSelector: '[data-testid="message-input"]'
   },
   {
     name: 'Grok',
@@ -42,7 +45,8 @@ const AI_APPS = [
     color: 'bg-blue-600',
     url: 'https://grok.com/',
     newChatUrl: 'https://grok.com/',
-    firstPromptSelector: '.message-bubble', // Placeholder for actual selector
+    firstPromptSelector: '.message-bubble',
+    inputSelector: 'textarea'
   }
 ];
 
@@ -173,8 +177,94 @@ async function transferConversation(currentApp, targetApp) {
   window.open(targetApp.newChatUrl, '_blank');
 }
 
+// Check if we're on a page opened from our extension and need to paste text
+function handleNewPageLoad() {
+  // Only run this on supported AI pages
+  const currentApp = getCurrentAIApp();
+  if (!currentApp) return;
+  
+  // Check if there's a query parameter or hash indicating we should paste
+  const urlParams = new URLSearchParams(window.location.search);
+  const shouldPaste = urlParams.has('makertools_paste') || 
+                      window.location.hash.includes('makertools_paste');
+  
+  if (shouldPaste) {
+    // Wait for the page to fully load and the input element to be available
+    setTimeout(async () => {
+      try {
+        // Try to get text from clipboard
+        const text = await navigator.clipboard.readText();
+        
+        if (text) {
+          // Find the input field using the selector for this app
+          const inputField = document.querySelector(currentApp.inputSelector);
+          
+          if (inputField) {
+            // Focus the input field
+            inputField.focus();
+            
+            // Set the value and trigger input event to make it recognized by the app
+            inputField.value = text;
+            inputField.dispatchEvent(new Event('input', { bubbles: true }));
+            
+            // Flash the input field to show it's been filled
+            const originalBackground = inputField.style.backgroundColor;
+            inputField.style.backgroundColor = '#e9f5ff';
+            setTimeout(() => {
+              inputField.style.backgroundColor = originalBackground;
+            }, 500);
+            
+            console.log('Pasted text into input field');
+          } else {
+            console.warn(`Could not find input field with selector: ${currentApp.inputSelector}`);
+          }
+        }
+      } catch (err) {
+        console.error('Error accessing clipboard or pasting text:', err);
+      }
+    }, 1000); // Wait 1 second to ensure page is loaded
+  }
+}
+
+// Modify transferConversation to add the paste parameter to the URL
+async function transferConversation(currentApp, targetApp) {
+  // Extract the first prompt from the current conversation
+  const firstPrompt = extractFirstPrompt(currentApp);
+  
+  // Try to copy the prompt to clipboard
+  if (firstPrompt) {
+    const copySuccess = await copyToClipboard(firstPrompt);
+    if (copySuccess) {
+      console.log('First prompt copied to clipboard');
+    } else {
+      console.warn('Failed to copy first prompt to clipboard');
+    }
+  }
+  
+  // Show feedback to the user
+  const feedbackMessage = firstPrompt 
+    ? `First prompt copied to clipboard! Opening ${targetApp.name}...` 
+    : `Opening ${targetApp.name}...`;
+  
+  // Create a toast notification
+  const toast = document.createElement('div');
+  toast.className = 'fixed bottom-5 left-5 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+  toast.textContent = feedbackMessage;
+  document.body.appendChild(toast);
+  
+  // Remove toast after 3 seconds
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+  
+  // Open the target app in a new tab with a parameter indicating we should paste
+  // Add a hash to avoid changing the server's URL structure
+  window.open(`${targetApp.newChatUrl}#makertools_paste`, '_blank');
+}
+
 // Run when page is loaded
 window.addEventListener('load', () => {
   importTailwind();
   addFloatingActionButtons();
+  handleNewPageLoad(); // Check if we need to paste
 });
