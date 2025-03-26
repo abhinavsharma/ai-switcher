@@ -3,7 +3,7 @@
   "name": "AI Chat Replicator",
   "version": "1.0",
   "description": "Replicate your conversations across multiple AI chat applications",
-  "permissions": ["activeTab", "scripting"],
+  "permissions": ["activeTab", "scripting", "clipboardWrite"],
   "host_permissions": ["*://*/*"],
   "content_scripts": [
     {

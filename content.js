@@ -11,30 +11,38 @@ const AI_APPS = [
   {
     name: 'ChatGPT',
     pattern: 'https://chatgpt.com/c/.+',
-    icon: '+', // Replace with actual icon later
+    icon: '+',
     color: 'bg-green-600',
-    url: 'https://chatgpt.com/c/'
+    url: 'https://chatgpt.com/',
+    newChatUrl: 'https://chatgpt.com/',
+    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
   },
   {
     name: 'Gemini',
     pattern: 'https://gemini.google.com/app/.+',
-    icon: 'G', // Replace with actual icon later
+    icon: 'G',
     color: 'bg-blue-600',
-    url: 'https://gemini.google.com/app/'
+    url: 'https://gemini.google.com/app/',
+    newChatUrl: 'https://gemini.google.com/',
+    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
   },
   {
     name: 'Claude',
     pattern: 'https://claude.ai/chat/.+',
-    icon: 'C', // Replace with actual icon later
-    color: 'bg-blue-600',
-    url: 'https://claude.ai/chat/'
+    icon: 'C',
+    color: 'bg-purple-600',
+    url: 'https://claude.ai/chat/',
+    newChatUrl: 'https://claude.ai/chats',
+    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
   },
   {
     name: 'Grok',
     pattern: 'https://grok.com/chat/.+',
-    icon: 'X', // Replace with actual icon later
-    color: 'bg-blue-600',
-    url: 'https://grok.com/chat/'
+    icon: 'X',
+    color: 'bg-red-600',
+    url: 'https://grok.com/chat/',
+    newChatUrl: 'https://grok.com/',
+    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
   }
 ];
 
@@ -63,7 +71,7 @@ function addFloatingActionButtons() {
     
     // Add click event to transfer conversation
     fab.addEventListener('click', () => {
-      transferConversation(app);
+      transferConversation(currentApp, app);
     });
     
     fabContainer.appendChild(fab);
@@ -72,16 +80,61 @@ function addFloatingActionButtons() {
   document.body.appendChild(fabContainer);
 }
 
+// Copy text to clipboard
+async function copyToClipboard(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch (err) {
+    console.error('Failed to copy text: ', err);
+    return false;
+  }
+}
+
+// Extract first prompt from the current conversation
+function extractFirstPrompt(app) {
+  const promptElement = document.querySelector(app.firstPromptSelector);
+  if (!promptElement) {
+    console.warn(`Could not find first prompt using selector: ${app.firstPromptSelector}`);
+    return null;
+  }
+  
+  return promptElement.textContent.trim();
+}
+
 // Extract conversation content and transfer to another AI app
-function transferConversation(targetApp) {
-  // This is a placeholder function - the actual implementation
-  // would scrape the current conversation and format it for the target app
-  alert(`Transfer conversation to ${targetApp.name}`);
+async function transferConversation(currentApp, targetApp) {
+  // Extract the first prompt from the current conversation
+  const firstPrompt = extractFirstPrompt(currentApp);
   
-  // TODO: Implement conversation extraction based on the current app's DOM structure
+  // Try to copy the prompt to clipboard
+  if (firstPrompt) {
+    const copySuccess = await copyToClipboard(firstPrompt);
+    if (copySuccess) {
+      console.log('First prompt copied to clipboard');
+    } else {
+      console.warn('Failed to copy first prompt to clipboard');
+    }
+  }
   
-  // Placeholder for now - would open a new tab with the target app
-  // window.open(targetApp.url + 'new', '_blank');
+  // Show feedback to the user
+  const feedbackMessage = firstPrompt 
+    ? `First prompt copied to clipboard! Opening ${targetApp.name}...` 
+    : `Opening ${targetApp.name}...`;
+  
+  // Create a toast notification
+  const toast = document.createElement('div');
+  toast.className = 'fixed bottom-5 left-5 bg-gray-800 text-white px-4 py-2 rounded-lg shadow-lg z-50';
+  toast.textContent = feedbackMessage;
+  document.body.appendChild(toast);
+  
+  // Remove toast after 3 seconds
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+  
+  // Open the target app in a new tab
+  window.open(targetApp.newChatUrl, '_blank');
 }
 
 // Run when page is loaded

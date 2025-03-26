@@ -19,13 +19,20 @@ A Chrome extension that lets you replicate conversations between different AI ch
 ## Features
 
 - Shows floating action buttons for other AI platforms when you're using one of the supported platforms
-- Each button allows you to transfer your current conversation to another AI platform
+- Copies the first prompt to your clipboard when you click a button
+- Opens a new tab with the selected AI platform
+- Shows a toast notification when the prompt is copied
 - Automatically detects which AI platform you're currently using
 - Uses Tailwind CSS for styling
 
 ## How It Works
 
-When you're using one of the supported AI chat platforms, the extension displays floating buttons for all the other AI platforms. Clicking a button will eventually transfer your conversation to that platform.
+When you're using one of the supported AI chat platforms, the extension displays floating buttons for all the other AI platforms. Clicking a button will:
+
+1. Copy the first prompt from your current conversation to your clipboard
+2. Show a toast notification to confirm
+3. Open a new tab with the selected AI platform
+4. You can then paste the prompt into the new platform
 
 ## Permissions
 
