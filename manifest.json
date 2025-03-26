@@ -7,12 +7,7 @@
   "host_permissions": ["*://*/*"],
   "content_scripts": [
     {
-      "matches": [
-        "*://chatgpt.com/*",
-        "*://gemini.google.com/*",
-        "*://claude.ai/*",
-        "*://grok.com/*"
-      ],
+      "matches": ["<all_urls>"],
       "js": ["content.js"]
     }
   ],

@@ -10,37 +10,37 @@ function importTailwind() {
 const AI_APPS = [
   {
     name: 'ChatGPT',
-    pattern: 'https://chatgpt.com/c/.+',
-    icon: '+',
-    color: 'bg-green-600',
+    domain: 'chatgpt.com',
+    icon: 'Chat',
+    color: 'bg-blue-600',
     url: 'https://chatgpt.com/',
     newChatUrl: 'https://chatgpt.com/',
-    firstPromptSelector: '[data-testid="conversation-turn-1"] .whitespace-pre-wrap'
+    firstPromptSelector: '[data-testid="conversation-turn-1"]'
   },
   {
     name: 'Gemini',
-    pattern: 'https://gemini.google.com/app/.+',
-    icon: 'G',
+    domain: 'gemini.google.com',
+    icon: 'Gemini',
     color: 'bg-blue-600',
-    url: 'https://gemini.google.com/app/',
+    url: 'https://gemini.google.com/',
     newChatUrl: 'https://gemini.google.com/',
     firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
   },
   {
     name: 'Claude',
-    pattern: 'https://claude.ai/chat/.+',
-    icon: 'C',
-    color: 'bg-purple-600',
-    url: 'https://claude.ai/chat/',
+    domain: 'claude.ai',
+    icon: 'Claude',
+    color: 'bg-blue-600',
+    url: 'https://claude.ai/',
     newChatUrl: 'https://claude.ai/chats',
     firstPromptSelector: '[data-testid="user-message"]', // Placeholder for actual selector
   },
   {
     name: 'Grok',
-    pattern: 'https://grok.com/chat/.+',
-    icon: 'X',
-    color: 'bg-red-600',
-    url: 'https://grok.com/chat/',
+    domain: 'grok.com',
+    icon: 'Grok',
+    color: 'bg-blue-600',
+    url: 'https://grok.com/',
     newChatUrl: 'https://grok.com/',
     firstPromptSelector: '.message-bubble', // Placeholder for actual selector
   }
@@ -48,8 +48,8 @@ const AI_APPS = [
 
 // Determine current AI app
 function getCurrentAIApp() {
-  const currentUrl = window.location.href;
-  return AI_APPS.find(app => new RegExp(app.pattern).test(currentUrl));
+  const hostname = window.location.hostname;
+  return AI_APPS.find(app => hostname.includes(app.domain));
 }
 
 // Create and add floating action buttons for other AI apps
