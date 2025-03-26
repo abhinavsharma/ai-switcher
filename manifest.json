@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "AI Chat Replicator",
+  "name": "AI Switcher",
   "version": "1.0",
   "description": "Replicate your conversations across multiple AI chat applications",
   "permissions": ["activeTab", "scripting", "clipboardWrite"],

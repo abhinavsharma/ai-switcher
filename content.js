@@ -16,7 +16,7 @@ const AI_APPS = [
     url: 'https://chatgpt.com/',
     newChatUrl: 'https://chatgpt.com/',
     firstPromptSelector: '[data-testid="conversation-turn-1"] .whitespace-pre-wrap',
-    inputSelector: '#prompt-textarea'
+    inputSelector: 'textarea'
   },
   {
     name: 'Gemini',
@@ -26,7 +26,7 @@ const AI_APPS = [
     url: 'https://gemini.google.com/',
     newChatUrl: 'https://gemini.google.com/',
     firstPromptSelector: '.user-query-bubble-with-background',
-    inputSelector: 'rich-textarea.text-input-field_textarea'
+    inputSelector: 'rich-textarea'
   },
   {
     name: 'Claude',
@@ -81,15 +81,40 @@ function isDarkMode() {
   return bodyBrightness < 128 || htmlBrightness < 128;
 }
 
-// Create and add pill buttons for other AI apps
+// Create and add floating action button with popup menu
 function addFloatingActionButtons() {
   const currentApp = getCurrentAIApp();
   if (!currentApp) return; // Not on a supported AI app
 
   const darkMode = isDarkMode();
   
-  const pillContainer = document.createElement('div');
-  pillContainer.className = 'fixed right-5 bottom-10 flex flex-col space-y-3 z-50';
+  // Create main container
+  const container = document.createElement('div');
+  container.className = 'fixed right-5 bottom-10 flex flex-col items-end z-50';
+  
+  // Create popup container for the menu items
+  const popupContainer = document.createElement('div');
+  popupContainer.className = 'hidden mb-3 flex flex-col space-y-3';
+  
+  // Create main button
+  const mainButton = document.createElement('div');
+  
+  // Set styles based on dark mode
+  if (darkMode) {
+    mainButton.className = 'py-1 px-4 rounded-full bg-gray-800 border border-gray-600 text-gray-300 flex items-center justify-center text-sm cursor-pointer hover:bg-gray-700 transition-colors duration-200';
+  } else {
+    mainButton.className = 'py-1 px-4 rounded-full bg-gray-100 border border-gray-300 text-gray-700 flex items-center justify-center text-sm cursor-pointer hover:bg-gray-200 transition-colors duration-200';
+  }
+  
+  mainButton.innerHTML = 'Copy Prompt <br>& Switch AI';
+  mainButton.title = 'Switch to another AI';
+  mainButton.style.minWidth = '80px';
+  mainButton.style.textAlign = 'center';
+  
+  // Add hover event to show popup
+  container.addEventListener('mouseenter', () => {
+    popupContainer.classList.remove('hidden');
+  });
   
   // Create a pill button for each AI app except the current one
   AI_APPS.forEach((app, index) => {
@@ -99,9 +124,9 @@ function addFloatingActionButtons() {
     
     // Set styles based on dark mode
     if (darkMode) {
-      pill.className = 'py-1 px-4 rounded-full bg-transparent border border-gray-600 text-gray-300 flex items-center justify-end text-sm cursor-pointer hover:bg-gray-800 transition-colors duration-200';
+      pill.className = 'py-1 px-4 rounded-full bg-gray-800 border border-gray-600 text-gray-300 flex items-center justify-end text-sm cursor-pointer hover:bg-gray-700 transition-colors duration-200';
     } else {
-      pill.className = 'py-1 px-4 rounded-full bg-transparent border border-gray-300 text-gray-700 flex items-center justify-end text-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200';
+      pill.className = 'py-1 px-4 rounded-full bg-gray-100 border border-gray-300 text-gray-700 flex items-center justify-end text-sm cursor-pointer hover:bg-gray-200 transition-colors duration-200';
     }
     
     pill.innerHTML = app.name;
@@ -111,13 +136,25 @@ function addFloatingActionButtons() {
     
     // Add click event to transfer conversation
     pill.addEventListener('click', () => {
+      // Hide the popup when an option is clicked
+      popupContainer.classList.add('hidden');
       transferConversation(currentApp, app);
     });
     
-    pillContainer.appendChild(pill);
+    popupContainer.appendChild(pill);
   });
   
-  document.body.appendChild(pillContainer);
+  // Add click away listener to hide popup when clicking elsewhere
+  document.addEventListener('click', (event) => {
+    if (!container.contains(event.target)) {
+      popupContainer.classList.add('hidden');
+    }
+  });
+  
+  // Assemble the components
+  container.appendChild(popupContainer);
+  container.appendChild(mainButton);
+  document.body.appendChild(container);
 }
 
 // Copy text to clipboard

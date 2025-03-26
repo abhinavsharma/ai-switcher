@@ -1,4 +1,4 @@
-# AI Chat Replicator
+# AI Switcher
 
 A Chrome extension that lets you replicate conversations between different AI chat applications.
 
