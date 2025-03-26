@@ -15,7 +15,7 @@ const AI_APPS = [
     color: 'bg-green-600',
     url: 'https://chatgpt.com/',
     newChatUrl: 'https://chatgpt.com/',
-    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
+    firstPromptSelector: '[data-testid="conversation-turn-1"] .whitespace-pre-wrap'
   },
   {
     name: 'Gemini',
@@ -33,7 +33,7 @@ const AI_APPS = [
     color: 'bg-purple-600',
     url: 'https://claude.ai/chat/',
     newChatUrl: 'https://claude.ai/chats',
-    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
+    firstPromptSelector: '[data-testid="user-message"]', // Placeholder for actual selector
   },
   {
     name: 'Grok',
@@ -42,7 +42,7 @@ const AI_APPS = [
     color: 'bg-red-600',
     url: 'https://grok.com/chat/',
     newChatUrl: 'https://grok.com/',
-    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
+    firstPromptSelector: '.message-bubble', // Placeholder for actual selector
   }
 ];
 
