@@ -43,6 +43,15 @@ const AI_APPS = [
     url: 'https://grok.com/',
     newChatUrl: 'https://grok.com/',
     firstPromptSelector: '.message-bubble'
+  },
+  {
+    name: 'Deepseek',
+    domain: 'chat.deepseek.com',
+    icon: 'Deepseek',
+    color: 'bg-blue-600',
+    url: 'https://chat.deepseek.com/',
+    newChatUrl: 'https://chat.deepseek.com/',
+    firstPromptSelector: '.fbb737a4'
   }
 ];
 
