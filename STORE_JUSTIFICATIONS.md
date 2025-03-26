@@ -1,32 +1,28 @@
-# Chrome Web Store Justifications
+# Chrome Web Store Privacy Practices Justifications
 
 ## Permission Justifications
 
 ### activeTab
-The extension needs access to the active tab to detect when the user is on an AI chat platform and to identify appropriate elements for transferring conversations.
-
-### scripting
-Scripting permission is required to inject our content script dynamically when needed, enabling the extension to interact with AI chat interfaces only when necessary.
+Required to detect when user is on an AI chat platform and identify conversation elements for transfer.
 
 ### clipboardWrite
-The extension requires clipboard access to copy conversation content when transferring between different AI platforms, eliminating the need for manual copying and pasting.
+Needed to copy conversation content when switching between AI platforms, eliminating manual copying.
 
-## Host Permissions
+### scripting
+Required to interact with AI chat interfaces and manage conversation transfers between platforms.
 
-### *://*/*
-Our extension needs to work across multiple AI chat services (like ChatGPT, Claude, Google Gemini, etc.). The broad host permission is necessary to function on all these platforms without requiring separate permissions for each service.
-- The extension only activates its features on recognized AI chat interfaces
-- No user data is collected or transmitted to external servers
-- All conversation processing happens locally within the browser
+### host permission use
+Works across multiple AI chat services (ChatGPT, Claude, Gemini, etc.) to allow seamless conversation transfers between platforms.
 
-## Data Usage and Privacy
-- AI Switcher does not collect, store, or transmit user data to any external servers
-- All conversation processing happens locally in the browser
-- No analytics or tracking is implemented
-- The extension does not use cookies or local storage for persistent data
+### remote code use
+No remote code is used. All extension code is packaged within the extension.
 
-## Code Security
-- All code is open source and available for review
-- No external libraries are loaded at runtime
-- No network requests are made to external services
-- The extension uses only documented Chrome extension APIs
+## Single Purpose Description
+This extension serves the single purpose of allowing users to transfer their ongoing conversations between different AI chat platforms seamlessly.
+
+## Data Usage Certification
+No user data is collected, stored, or transmitted to external servers. All conversation processing happens locally within the browser. The extension complies with the Chrome Web Store Developer Program Policies.
+
+## Contact Information
+Email: [your-email@example.com]
+Status: Verified
