@@ -16,20 +16,9 @@ AI Switcher operates entirely within your browser. When you use the extension:
 2. It provides functionality to copy conversation content to your clipboard
 3. All processing happens locally on your device
 
-## Permissions
-AI Switcher requires certain permissions to function:
-- **activeTab**: To identify and interact with AI chat platforms
-- **scripting**: To manage conversation transfers
-- **clipboardWrite**: To copy conversation content
-- **host permissions**: To function across multiple AI websites
-
 These permissions are used solely for the purpose of transferring conversations between AI platforms and never for data collection.
 
 ## Changes to This Policy
 Any updates to this privacy policy will be posted within the extension's description in the Chrome Web Store.
-
-## Contact
-If you have questions about this privacy policy or the extension, please contact:
-[your-email@example.com]
 
 Last updated: March 26, 2025
