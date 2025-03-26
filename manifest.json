@@ -1,13 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "ChatGPT FAB",
+  "name": "AI Chat Replicator",
   "version": "1.0",
-  "description": "Adds a floating action button to ChatGPT",
+  "description": "Replicate your conversations across multiple AI chat applications",
   "permissions": ["activeTab", "scripting"],
   "host_permissions": ["*://*/*"],
   "content_scripts": [
     {
-      "matches": ["*://chatgpt.com/*"],
+      "matches": [
+        "*://chatgpt.com/*",
+        "*://gemini.google.com/*",
+        "*://claude.ai/*",
+        "*://grok.com/*"
+      ],
       "js": ["content.js"]
     }
   ],
