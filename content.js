@@ -15,7 +15,7 @@ const AI_APPS = [
     color: 'bg-blue-600',
     url: 'https://chatgpt.com/',
     newChatUrl: 'https://chatgpt.com/',
-    firstPromptSelector: '[data-testid="conversation-turn-1"]'
+    firstPromptSelector: '[data-testid="conversation-turn-1" .whitespace-pre-wrap'
   },
   {
     name: 'Gemini',
@@ -24,7 +24,7 @@ const AI_APPS = [
     color: 'bg-blue-600',
     url: 'https://gemini.google.com/',
     newChatUrl: 'https://gemini.google.com/',
-    firstPromptSelector: '.first-prompt-selector', // Placeholder for actual selector
+    firstPromptSelector: '.user-query-bubble-with-background', // Placeholder for actual selector
   },
   {
     name: 'Claude',
@@ -52,32 +52,68 @@ function getCurrentAIApp() {
   return AI_APPS.find(app => hostname.includes(app.domain));
 }
 
-// Create and add floating action buttons for other AI apps
+// Detect dark mode
+function isDarkMode() {
+  // Method 1: Check prefers-color-scheme media query
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    return true;
+  }
+  
+  // Method 2: Check background color of body or html
+  const bodyBg = window.getComputedStyle(document.body).backgroundColor;
+  const htmlBg = window.getComputedStyle(document.documentElement).backgroundColor;
+  
+  // Convert rgb/rgba to brightness value (0-255)
+  const getBrightness = (color) => {
+    const rgb = color.match(/\d+/g);
+    if (!rgb || rgb.length < 3) return 255; // Default to light if can't parse
+    return (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+  };
+  
+  const bodyBrightness = getBrightness(bodyBg);
+  const htmlBrightness = getBrightness(htmlBg);
+  
+  // If either body or html has a dark background, consider it dark mode
+  return bodyBrightness < 128 || htmlBrightness < 128;
+}
+
+// Create and add pill buttons for other AI apps
 function addFloatingActionButtons() {
   const currentApp = getCurrentAIApp();
   if (!currentApp) return; // Not on a supported AI app
 
-  const fabContainer = document.createElement('div');
-  fabContainer.className = 'fixed right-5 bottom-10 flex flex-col space-y-3 z-50';
+  const darkMode = isDarkMode();
   
-  // Create a FAB for each AI app except the current one
+  const pillContainer = document.createElement('div');
+  pillContainer.className = 'fixed right-5 bottom-10 flex flex-col space-y-3 z-50';
+  
+  // Create a pill button for each AI app except the current one
   AI_APPS.forEach((app, index) => {
     if (app.name === currentApp.name) return; // Skip current app
     
-    const fab = document.createElement('div');
-    fab.className = `w-12 h-12 rounded-full ${app.color} text-white flex items-center justify-center text-lg shadow-lg cursor-pointer hover:scale-105 transition-transform duration-200 hover:shadow-xl`;
-    fab.innerHTML = app.icon;
-    fab.title = `Open in ${app.name}`;
+    const pill = document.createElement('div');
+    
+    // Set styles based on dark mode
+    if (darkMode) {
+      pill.className = 'py-1 px-4 rounded-full bg-transparent border border-gray-600 text-gray-300 flex items-center justify-end text-sm cursor-pointer hover:bg-gray-800 transition-colors duration-200';
+    } else {
+      pill.className = 'py-1 px-4 rounded-full bg-transparent border border-gray-300 text-gray-700 flex items-center justify-end text-sm cursor-pointer hover:bg-gray-100 transition-colors duration-200';
+    }
+    
+    pill.innerHTML = app.name;
+    pill.title = `Open in ${app.name}`;
+    pill.style.minWidth = '80px'; // Ensure consistent width
+    pill.style.textAlign = 'right';
     
     // Add click event to transfer conversation
-    fab.addEventListener('click', () => {
+    pill.addEventListener('click', () => {
       transferConversation(currentApp, app);
     });
     
-    fabContainer.appendChild(fab);
+    pillContainer.appendChild(pill);
   });
   
-  document.body.appendChild(fabContainer);
+  document.body.appendChild(pillContainer);
 }
 
 // Copy text to clipboard
