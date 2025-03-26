@@ -34,6 +34,12 @@ When you're using one of the supported AI chat platforms, the extension displays
 3. Open a new tab with the selected AI platform
 4. You can then paste the prompt into the new platform
 
+## Screenshots
+
+![Main button showing copy and switch options](screenshots/claude.png)
+![Menu expanded showing AI platform options](screenshots/chatgpt.png)
+![Toast notification after copying](screenshots/gemini.png)
+
 ## Permissions
 
 This extension only activates on the supported AI chat platforms.
