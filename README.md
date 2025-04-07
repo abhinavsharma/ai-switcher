@@ -43,3 +43,19 @@ When you're using one of the supported AI chat platforms, the extension displays
 ## Permissions
 
 This extension only activates on the supported AI chat platforms.
+
+## Development
+
+### Creating a release package
+
+To create a ZIP file for submission to the Chrome Web Store:
+
+```bash
+# Using the export script directly
+./export.sh
+
+# Or using npm
+npm run export
+```
+
+This will create a ZIP file in the `releases` directory with the current date and timestamp.

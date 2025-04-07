@@ -3,7 +3,7 @@
   "name": "AI Switcher",
   "version": "1.0",
   "description": "Replicate your conversations across multiple AI chat applications",
-  "permissions": ["activeTab", "scripting", "clipboardWrite"],
+  "permissions": ["clipboardWrite"],
   "host_permissions": ["*://*/*"],
   "content_scripts": [
     {

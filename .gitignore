@@ -1,3 +1,5 @@
 # Ignore releases folder
 .DS_Store
 releases/
+
+node_modules/

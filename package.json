@@ -1,0 +1,26 @@
+{
+  "name": "ai-switcher",
+  "version": "1.0.0",
+  "description": "A Chrome extension that lets you replicate conversations between different AI chat applications.",
+  "main": "content.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "export": "./export.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abhinavsharma/ai-switcher.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abhinavsharma/ai-switcher/issues"
+  },
+  "homepage": "https://github.com/abhinavsharma/ai-switcher#readme",
+  "dependencies": {
+    "canvas": "^3.1.0",
+    "jsdom": "^26.0.0",
+    "sharp": "^0.34.1"
+  }
+}
